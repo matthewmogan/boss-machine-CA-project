@@ -18,6 +18,4 @@ apiRouter.get("/:model",(req, res) => {
     console.log("hello")
 })
 
-
-
 module.exports = apiRouter
