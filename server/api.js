@@ -50,8 +50,19 @@ apiRouter.put("/:model/:id",(req, res) => {
         const updatedInstance = db.updateInstanceInDatabase(req.model, req.body)
         res.status(200).send(updatedInstance)
     } catch {
-        res.status(404).send(`Could not update the instance`)
+        res.status(404).send(`Could not update instance ${req.id} in ${req.model}`)
     }
 })
+// Delete - delete a minion, meeting, or ID by ID
+apiRouter.delete("/:model/:id",(req, res) => {
+    const deleted = db.deleteFromDatabasebyId(req.model,req.id)
+    if (!deleted) {
+        res.status(400).send(`Could not delete instance ${req.id} in ${req.model}`)
+    } else {
+        res.status(200).send(`Deleted instance ${req.id} in ${req.model}`)
+    }
+}
+
+)
 
 module.exports = apiRouter
