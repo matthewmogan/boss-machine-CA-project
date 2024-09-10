@@ -61,8 +61,14 @@ apiRouter.delete("/:model/:id",(req, res) => {
     } else {
         res.status(200).send(`Deleted instance ${req.id} in ${req.model}`)
     }
-}
-
-)
+})
+// Delete - delete the whole meetings database
+apiRouter.delete("/:model",(req, res) => {
+    if (req.model !== "meetings"){
+        res.status(400).send(`Can not delete the entire ${req.model} model`)
+    } else {
+        res.status(200).send(db.deleteAllFromDatabase(req.model))
+    }
+})
 
 module.exports = apiRouter
