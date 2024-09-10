@@ -192,6 +192,21 @@ const findDataArrayByName = (name) => {
   }
 }
 
+const validateName = (name) => {
+  switch (name) {
+    case 'minions':
+      return true;
+    case 'ideas':
+      return true;
+    case 'work':
+      return true;
+    case 'meetings':
+      return true;
+    default:
+      return false;
+  }
+}
+
 const getAllFromDatabase = (modelType) => {
   const model = findDataArrayByName(modelType);
   if (model === null) {
@@ -271,4 +286,5 @@ module.exports = {
   updateInstanceInDatabase,
   deleteFromDatabasebyId,
   deleteAllFromDatabase,
+  validateName
 };
