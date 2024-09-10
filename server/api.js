@@ -1,6 +1,7 @@
 const express = require("express");
 const apiRouter = express.Router();
 const db = require('./db')
+const checkMillionDollarIdea = require("./checkMillionDollarIdea")
 
 // Parameter to pull the model name
 apiRouter.param("model",(req, res, next, model) =>{
@@ -26,7 +27,7 @@ apiRouter.get("/:model",(req, res) => {
     res.status(200).send(db.getAllFromDatabase(req.model))
 })
 // Post - create a mew minion, idea, or meeting and send to the database 
-apiRouter.post("/:model",(req, res) => {
+apiRouter.post("/:model",checkMillionDollarIdea,(req, res) => {
     try{
         const newEntry = db.addToDatabase(req.model,req.body)
         res.status(201).send(newEntry)
@@ -45,7 +46,7 @@ apiRouter.get("/:model/:id",(req, res) => {
     }
 })
 // Put - update a minion, meeting, or ID by ID
-apiRouter.put("/:model/:id",(req, res) => {
+apiRouter.put("/:model/:id",checkMillionDollarIdea,(req, res) => {
     try {
         const updatedInstance = db.updateInstanceInDatabase(req.model, req.body)
         res.status(200).send(updatedInstance)
