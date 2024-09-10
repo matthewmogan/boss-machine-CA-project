@@ -35,13 +35,22 @@ apiRouter.post("/:model",(req, res) => {
         res.status(404).send(`Invalid body - please check ${req.model} object's schema, and resend object`)
     }
 })
-// Get - get a minion or idea by ID
+// Get - get a minion, idea, or meeting by ID
 apiRouter.get("/:model/:id",(req, res) => {
     try {
         const result = db.getFromDatabaseById(req.model, req.id)
         res.status(200).send(result)
     } catch {
         res.status(404).send(`Could not find ${req.id} in the ${req.model} database`)
+    }
+})
+// Put - update a minion, meeting, or ID by ID
+apiRouter.put("/:model/:id",(req, res) => {
+    try {
+        const updatedInstance = db.updateInstanceInDatabase(req.model, req.body)
+        res.status(200).send(updatedInstance)
+    } catch {
+        res.status(404).send(`Could not update the instance`)
     }
 })
 
