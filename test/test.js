@@ -525,6 +525,8 @@ describe('checkMillionDollarIdea middleware', function() {
       numWeeks: 4,
       weeklyRevenue: 2,
     }
+    console.log("400 error test body:")
+    console.log(req.body)
     checkMillionDollarIdea(req, response, nextCallback);
     expect(status).to.equal(400);
     expect(nextCalled).to.be.false;

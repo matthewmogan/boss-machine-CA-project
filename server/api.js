@@ -22,12 +22,21 @@ apiRouter.param("id",(req,res,next,id) => {
     }
 })
 
+const checkModelforMillionDollarIdea = (req, res, next) => {
+    if (req.model !== "ideas") {
+        next()
+    } else {
+        return checkMillionDollarIdea(req, res, next)
+    }
+}
+
+
 // Get - get array of all minions, ideas, or meetings:
 apiRouter.get("/:model",(req, res) => {
     res.status(200).send(db.getAllFromDatabase(req.model))
 })
 // Post - create a mew minion, idea, or meeting and send to the database 
-apiRouter.post("/:model",checkMillionDollarIdea,(req, res) => {
+apiRouter.post("/:model",checkModelforMillionDollarIdea,(req, res) => {
     try{
         const newEntry = db.addToDatabase(req.model,req.body)
         res.status(201).send(newEntry)
@@ -46,7 +55,7 @@ apiRouter.get("/:model/:id",(req, res) => {
     }
 })
 // Put - update a minion, meeting, or ID by ID
-apiRouter.put("/:model/:id",checkMillionDollarIdea,(req, res) => {
+apiRouter.put("/:model/:id",checkModelforMillionDollarIdea,(req, res) => {
     try {
         const updatedInstance = db.updateInstanceInDatabase(req.model, req.body)
         res.status(200).send(updatedInstance)
@@ -57,10 +66,10 @@ apiRouter.put("/:model/:id",checkMillionDollarIdea,(req, res) => {
 // Delete - delete a minion, meeting, or ID by ID
 apiRouter.delete("/:model/:id",(req, res) => {
     const deleted = db.deleteFromDatabasebyId(req.model,req.id)
-    if (!deleted) {
+    if (deleted === false) {
         res.status(400).send(`Could not delete instance ${req.id} in ${req.model}`)
     } else {
-        res.status(200).send(`Deleted instance ${req.id} in ${req.model}`)
+        res.status(204).send(`Deleted instance ${req.id} in ${req.model}`)
     }
 })
 // Delete - delete the whole meetings database
@@ -68,7 +77,7 @@ apiRouter.delete("/:model",(req, res) => {
     if (req.model !== "meetings"){
         res.status(400).send(`Can not delete the entire ${req.model} model`)
     } else {
-        res.status(200).send(db.deleteAllFromDatabase(req.model))
+        res.status(204).send(db.deleteAllFromDatabase(req.model))
     }
 })
 
