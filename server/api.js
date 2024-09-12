@@ -29,20 +29,20 @@ const checkModelforMillionDollarIdea = (req, res, next) => {
         return checkMillionDollarIdea(req, res, next)
     }
 }
-
-
 // Get - get array of all minions, ideas, or meetings:
 apiRouter.get("/:model",(req, res) => {
     res.status(200).send(db.getAllFromDatabase(req.model))
 })
 // Post - create a mew minion, idea, or meeting and send to the database 
 apiRouter.post("/:model",checkModelforMillionDollarIdea,(req, res) => {
-    try{
-        const newEntry = db.addToDatabase(req.model,req.body)
-        res.status(201).send(newEntry)
-    }
-    catch {
-        res.status(404).send(`Invalid body - please check ${req.model} object's schema, and resend object`)
+    if (req.model === "meetings"){
+        const newMeeting = db.createMeeting()
+        db.addToDatabase("meetings",newMeeting)
+        res.status(201).send(newMeeting)
+    } else {
+    const newEntry = db.addToDatabase(req.model,req.body)
+    res.status(201).send(newEntry)
+    res.status(404).send(`Invalid body - please check ${req.model} object's schema, and resend object`)
     }
 })
 // Get - get a minion, idea, or meeting by ID
